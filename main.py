@@ -24,7 +24,7 @@ def jrrp_text_init(nub_in):
     elif nub >= 60:
         return "今天的人品是：" + str(nub_in) + "\n" + "今天是 非常¿ 不错的一天呢!"
     elif nub > 50:
-        return "今天的人品是：" + str(nub_in) + "\n" + f"{nub} 你的人品还不错呢"
+        return "今天的人品是：" + str(nub_in) + "\n" + "你的人品还不错呢"
     elif nub == 50:
         return "今天的人品是：" + str(nub_in) + "\n" + "五五开！"
     elif nub >= 40:
