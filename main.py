@@ -39,6 +39,10 @@ def from_input_get_score(user_id):
     random.seed(int(when_is_now_in_utc_plus_8()) + int(user_id))
     score = random.randint(0, 100)
 
+    # 给那些运气烂的家伙
+    if score < 35:
+        score += random.randint(23, 31)
+
     return score
 
 
