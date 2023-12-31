@@ -4,6 +4,7 @@ import random
 from datetime import datetime, timedelta
 import sys
 
+GOOD_DAYS = [2024210, 202429, 202422, 202467, 202468, 202469, 202567, 202568, 202569]
 
 bot = telebot.TeleBot(str(sys.argv[1]), parse_mode="MARKDOWN")
 
@@ -42,6 +43,9 @@ def from_input_get_score(user_id):
     # 给那些运气烂的家伙
     if score < 35:
         score += random.randint(23, 31)
+
+    if when_is_now_in_utc_plus_8() in GOOD_DAYS:
+        score += 100
 
     return score
 
