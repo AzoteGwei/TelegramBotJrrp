@@ -1,20 +1,22 @@
 # 使用 python3 main.py yourtoken 来启动，比如 python3 main.py 114514:ABCDEFGO_HIJKLMNOxE
-import telebot
+from telebot.async_telebot import AsyncTeleBot
+import asyncio
 import random
 from datetime import datetime, timedelta
 import sys
 
 GOOD_DAYS = [2024210, 202429, 202422, 202467, 202468, 202469, 202567, 202568, 202569]
 
-bot = telebot.TeleBot(str(sys.argv[1]), parse_mode="MARKDOWN")
-
+bot = AsyncTeleBot(token=str(sys.argv[1]), parse_mode="MARKDOWN")
 
 @bot.message_handler(commands=["jrrp"])
-def send_jrrp(message):
-    bot.reply_to(message, jrrp_text_init(from_input_get_score(message.from_user.id)))
+async def send_jrrp(message):
+    score = await from_input_get_score(message.from_user.id)
+    reply = await jrrp_text_init(score)
+    await bot.reply_to(message, reply)
 
 
-def jrrp_text_init(nub_in):
+async def jrrp_text_init(nub_in):
     nub = int(nub_in)
     if nub == 100:
         return "今天的人品是：" + str(nub_in) + "\n" + "100 人品好评!!!"
@@ -36,21 +38,22 @@ def jrrp_text_init(nub_in):
         return "今天的人品是：" + str(nub_in) + "\n" + "抽大奖¿"
 
 
-def from_input_get_score(user_id):
-    random.seed(int(when_is_now_in_utc_plus_8()) + int(user_id))
+async def from_input_get_score(user_id):
+    today_date = int(await when_is_now_in_utc_plus_8())
+    random.seed(today_date + int(user_id))
     score = random.randint(0, 100)
 
     # 给那些运气烂的家伙
     if score < 35:
         score += random.randint(23, 31)
 
-    if when_is_now_in_utc_plus_8() in GOOD_DAYS:
+    if today_date in GOOD_DAYS:
         score += 100
 
     return score
 
 
-def when_is_now_in_utc_plus_8():
+async def when_is_now_in_utc_plus_8():
     # 获取当前时间
     current_time = datetime.utcnow()
 
@@ -65,4 +68,5 @@ def when_is_now_in_utc_plus_8():
     return int(str(year) + str(month) + str(day))
 
 
-bot.infinity_polling()
+if __name__ == '__main__':
+    asyncio.run(bot.polling())

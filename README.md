@@ -7,13 +7,13 @@
 ### 依赖
 
 ```bash
-pip install pyTelegramBotAPI
+pip install pyTelegramBotAPI aiohttp
 ```
 
 ### 运行
 
 ```bash
-python3 main.py yourtoken
+python3 main.py <Your Token Here>
 ```
 
 ## 使用 Docker
